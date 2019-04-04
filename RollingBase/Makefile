@@ -1,9 +1,7 @@
-BOARD=f3
+BOARD=f4
 PROJECT_DIR=PID
 PROJECT_NAME=PID
 DOC_DIR= /home/$(USER)/STM32Cube/
-BINPATH= /usr/bin
-CUSTOM_C_SOURCES=crc_16.c,robotronik_protocol.c,remote_call.c,tof.c,system.c,pi_client.c,heap.c,map.c,astar.c,obstacle.c,strategy.c,gas.c,position_client.c,z_client.c,build.c
 
 rouge = \033[0;31m
 vert = \033[0;32m
@@ -14,29 +12,37 @@ fin_gras = \033[0;21m
 
 ORI=$(CURDIR)
 
+#ToDo : in addSource, exclude file which are not stm32$(BOARD) among stm32xx cpu
+
 c:
 	make comp
 
 f:
-	make flash
+	sudo make flash
 
 d:
 	make debug
 
 cf:
 	make comp
-	make flash
+	sudo make flash
 
 cfd:
 	make comp
 	make flash
 	make debug
 
+addSource:
+	@cat $(PROJECT_DIR)/Makefile | sed -e '/^Src/ d' -e '/^ Src/ d' -e '/^\\/ d' > $(PROJECT_DIR)/tmpMakefile; 
+	mv $(PROJECT_DIR)/tmpMakefile $(PROJECT_DIR)/Makefile;
+	sed -i '/C_SOURCES =/a$(patsubst $(PROJECT_DIR)/Src/%.c,Src/%.c \\\n, $(wildcard $(PROJECT_DIR)/Src/*.c))\\' $(PROJECT_DIR)/Makefile
+
 comp:
 	@echo -e "${vert_gras}+--------------------[ Compilation ]--------------------+ ${fin}"
-	cd $(PROJECT_DIR) ;\
-	make -j6 all
-	cd "${ORI}" ;\
+	make addSource
+	cd $(PROJECT_DIR);\
+	make all
+	cd $(ORI);\
 
 	@echo -e "${vert_gras}+----------------[ Compilation terminée ]---------------+ ${fin}"
 
@@ -45,13 +51,20 @@ flash:
 	openocd -f openocd/st_nucleo_$(BOARD).cfg -c "program $(PROJECT_DIR)/build/$(PROJECT_NAME).bin exit 0x08000000 reset"
 	@echo -e "${vert_gras}+----------------[ Transfert terminé ]------------------+ ${fin}"
 
+sf:
+	@echo -e "${vert_gras}+---------------------[ Transfert ]---------------------+ ${fin}"
+	st-flash write $(PROJECT_DIR)/build/$(PROJECT_NAME).bin 0x08000000
+	@echo -e "${vert_gras}+----------------[ Transfert terminé ]------------------+ ${fin}"
+
 debug:
 	@echo -e "${vert_gras}+-----------------------[ Debug ]-----------------------+ ${fin}"
 	arm-none-eabi-gdb $(PROJECT_DIR)/build/$(PROJECT_NAME).elf --command=openocd/attach_$(BOARD).gdb
 	@echo -e "${vert_gras}+-------------------[ Debug terminé ]-------------------+ ${fin}"
 
-config:
-	python configure.py $(PROJECT_DIR) $(BINPATH) $(CUSTOM_C_SOURCES)
+flash_file:
+	@echo -e "${vert_gras}+-------------[ Transfert du fichier local]-------------+ ${fin}"
+	openocd -f openocd/st_nucleo_$(BOARD).cfg -c "program local.bin exit 0x08000000 reset"
+	@echo -e "${vert_gras}+--------[ Transfert du fichier local terminé ]---------+ ${fin}"
 
 doc:
 	qpdfview $(DOC_DIR)/stm32$(BOARD)_doc.pdf &
@@ -59,5 +72,5 @@ doc:
 clean:
 	cd $(PROJECT_DIR) ;\
 	make clean
-	cd "${ORI}";\
+	cd $(ORI);\
 rm -f openocd/openocd.log
