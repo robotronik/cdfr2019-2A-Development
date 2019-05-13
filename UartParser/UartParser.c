@@ -14,23 +14,41 @@ void initVar(int * a,int index){
 }
 
 void parseUart(char data[NB_UART]){
-    int i;
+    int i = 0;
     int index;
     int value;
     int state;
-    for(i=0; i<NB_UART ;i++){
-        switch (state)
-        {
-            case 0:
-                if(data[i]=='\n'){
-                    state++;
-                }
-                break;
-            case 1:
-                state++;
-                index = data[i]-48;
-                break;
-            
+    while(i<NB_UART){
+        if(data[i]=='*'){
+            state = 0;
         }
+        // else if : maybe not needed in terms of performance
+        else if(data[i]=='\0'){
+            i = NB_UART;
+        }
+        else{
+            switch (state)
+            {
+                case 0:
+                    if(data[i]=='\n'){
+                        state++;
+                    }
+                    break;
+                case 1:
+                    state++;
+                    index = data[i]-48;
+                    break;
+                case 2:
+                    if(!isblank(data[i])){
+                        state = 0;
+                        //get the value of the parameter
+                        value = atoi(data+i);
+                        //doing the job, now that everything is parsed
+                        pVar[index]*=value;
+                    }
+                    break;
+            }
+        }
+        i++;
     }
 }
