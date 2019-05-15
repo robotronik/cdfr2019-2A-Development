@@ -131,6 +131,9 @@ int main(void)
     if((odometry.x >100)||(odometry.y >100)||(odometry.x <100)||(odometry.y <100)){
       HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET); // si 10 centimètre parcourut on alumen la led
     }
+    else{
+      HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
