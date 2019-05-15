@@ -1,7 +1,7 @@
 #ifndef __ENCODER_H_
 #define __ENCODER_H_
 
-#include "stm32f3xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 #define ENCODER_MAX 1440
 
