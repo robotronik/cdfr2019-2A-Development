@@ -39,7 +39,7 @@ addSource:
 
 comp:
 	@echo -e "${vert_gras}+--------------------[ Compilation ]--------------------+ ${fin}"
-	make addSource
+	#make addSource
 	cd $(PROJECT_DIR);\
 	make all
 	cd $(ORI);\

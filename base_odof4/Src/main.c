@@ -115,6 +115,7 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM5_Init();
   MX_TIM3_Init();
+  MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
   //TODO : verifier les htim et leur config
   //usage : Odometry *odometry, TIM_HandleTypeDef *htim_l, TIM_HandleTypeDef *htim_r, TIM_HandleTypeDef *htim_poll

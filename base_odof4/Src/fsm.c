@@ -1,6 +1,6 @@
 //fsm model
 #include "fsm.h"
-void fsmInit(){
+/* void fsmInit(){
 
 }
 
@@ -14,3 +14,4 @@ fsmState nextState( fsmState state){
         break;
     }
 }
+ */

@@ -91,7 +91,8 @@ void Error_Handler(void);
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
-
+//TODO : TUTO expliquer dans un  tuto comment resoudre cette erreur 
+#define ARM_MATH_CM4 //lol
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
