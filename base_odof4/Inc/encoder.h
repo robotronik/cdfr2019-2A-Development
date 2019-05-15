@@ -34,7 +34,7 @@ typedef struct Encoder_S{
   
 }Encoder;
 
-void init_encoder(Encoder *encoder);
+void init_encoder(Encoder *encoder,  TIM_HandleTypeDef *htima);
 /**
  * Initialise encoder.
  */

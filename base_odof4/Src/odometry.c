@@ -6,7 +6,8 @@ volatile float deltaL=(20.65*2*M_PI/1440.0)/199.66; //ENCODER_STEP_DIST/ENCODER_
 
 void update_odometry(Odometry *odometry){
   int dl_l = update_encoder(&odometry->encoder_l);
-  int dl_r = update_encoder(&odometry->encoder_r);
+  //TODO : modif retour
+  int dl_r = dl_l;// update_encoder(&odometry->encoder_r);
 
 #if TEST_ENCODER==1
   led_level = (int) (((float) odometry->encoder_l.htim->Instance->CNT / ENCODER_MAX)*255);
@@ -35,12 +36,12 @@ void update_odometry(Odometry *odometry){
   }
 }
 
-void init_odometry(Odometry *odometry, TIM_HandleTypeDef *htim_poll){
+void init_odometry(Odometry *odometry, TIM_HandleTypeDef *htim_l, TIM_HandleTypeDef *htim_r, TIM_HandleTypeDef *htim_poll){
   odometry->x = odometry->y = 0;
   odometry->theta = 0;
 
-  init_encoder(&odometry->encoder_l);
-  init_encoder(&odometry->encoder_r);
+  init_encoder(&odometry->encoder_l,htim_l);
+  init_encoder(&odometry->encoder_r,htim_r);
 
   start_encoder(&odometry->encoder_l);
   start_encoder(&odometry->encoder_r);

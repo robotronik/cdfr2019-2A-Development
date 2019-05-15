@@ -69,6 +69,7 @@
 
 /* USER CODE BEGIN PV */
 Odometry odometry;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -115,13 +116,20 @@ int main(void)
   MX_TIM5_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-
+  //TODO : verifier les htim et leur config
+  //usage : Odometry *odometry, TIM_HandleTypeDef *htim_l, TIM_HandleTypeDef *htim_r, TIM_HandleTypeDef *htim_poll
+  init_odometry(&odometry,&htim2,&htim1, &htim10);
+  HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    //TODO : faire que langle ne soit pas pris en compte
+    if((odometry->x >100)||(odometry->y >100)||(odometry->x <100)||(odometry->y <100)){
+      HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET); // si 10 centimètre parcourut on alumen la led
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

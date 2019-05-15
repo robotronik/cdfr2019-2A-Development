@@ -38,6 +38,10 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "odometry.h"
+extern Odometry odometry;
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim15;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -212,6 +216,12 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /* USER CODE BEGIN 1 */
-
+void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
+{
+  // FIXME : htim 15 is maybe not optimal
+  if(htim->Instance == htim15.Instance){
+    update_odometry(&odometry);
+  }
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
