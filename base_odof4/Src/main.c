@@ -47,7 +47,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "odometry.h"
-
+#include <stdio.h>
+  volatile Odometry odometry;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,7 +69,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-Odometry odometry;
 
 /* USER CODE END PV */
 
@@ -80,7 +80,13 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
+{
+  // FIXME : htim 10 is maybe not optimal
+  if(htim->Instance == htim10.Instance){      
+    update_odometry(&odometry);
+  }
+}
 /* USER CODE END 0 */
 
 /**
@@ -113,27 +119,27 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_TIM2_Init();
-  MX_TIM5_Init();
   MX_TIM3_Init();
+  MX_TIM5_Init();
   MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
-  //TODO : verifier les htim et leur config
-  //usage : Odometry *odometry, TIM_HandleTypeDef *htim_l, TIM_HandleTypeDef *htim_r, TIM_HandleTypeDef *htim_poll
-  init_odometry(&odometry,&htim2,&htim5, &htim10);
-  HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  init_odometry(&odometry,&htim2,&htim5, &htim10);
+  HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
   while (1)
   {
-    //TODO : faire que langle ne soit pas pris en compte
-    if((odometry.x >100)||(odometry.y >100)||(odometry.x <100)||(odometry.y <100)){
+    //attention au cast int / float
+    if((int)(odometry.x)>10){
       HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET); // si 10 centimètre parcourut on alumen la led
     }
     else{
       HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
     }
+    HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

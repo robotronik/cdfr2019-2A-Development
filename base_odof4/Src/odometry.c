@@ -1,13 +1,18 @@
 #include "odometry.h"
+#include "usart.h"
 
 volatile float ENCODER_DIST=190.66;//distance between encoders
-volatile float ENCODER_STEP_DIST=20.65*2*M_PI/1440.0; //distance for 1 encoder step SAME
+volatile float ENCODER_STEP_DIST=/* 20.65 */2/6.0*2*M_PI/1440.0; //distance for 1 encoder step SAME
 volatile float deltaL=(20.65*2*M_PI/1440.0)/199.66; //ENCODER_STEP_DIST/ENCODER_DIST
-
+int max;
 void update_odometry(Odometry *odometry){
   int dl_l = update_encoder(&odometry->encoder_l);
   //TODO : modif retour
   int dl_r = dl_l;// update_encoder(&odometry->encoder_r);
+
+    char buffer[80];
+    int n = sprintf(buffer, "%d\n",(int)(odometry->x));
+    HAL_UART_Transmit(&huart2,buffer,n,10);
 
 #if TEST_ENCODER==1
   led_level = (int) (((float) odometry->encoder_l.htim->Instance->CNT / ENCODER_MAX)*255);

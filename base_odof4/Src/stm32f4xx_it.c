@@ -40,8 +40,6 @@
 /* USER CODE BEGIN Includes */
 #include "odometry.h"
 extern Odometry odometry;
-extern TIM_HandleTypeDef htim1;
-extern TIM_HandleTypeDef htim15;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -75,6 +73,7 @@ extern TIM_HandleTypeDef htim15;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern TIM_HandleTypeDef htim10;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -215,13 +214,21 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32f4xx.s).                    */
 /******************************************************************************/
 
-/* USER CODE BEGIN 1 */
-void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
+/**
+  * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
+  */
+void TIM1_UP_TIM10_IRQHandler(void)
 {
-  // FIXME : htim 15 is maybe not optimal
-  if(htim->Instance == htim15.Instance){
-    update_odometry(&odometry);
-  }
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
+
+  /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim10);
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
 }
+
+/* USER CODE BEGIN 1 */
+
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

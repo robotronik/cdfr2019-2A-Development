@@ -16,9 +16,9 @@ int update_encoder(Encoder *encoder){
 
   int dl = cnt - encoder->last_pos;
   encoder->last_pos = cnt; //apres ca je sais pas wallah inchalla
-  if(dl > 1){
+  if(dl > 500){
     dl = -1;
-  }else if(dl < -1){
+  }else if(dl < -500){
     dl = +1;
   }
   

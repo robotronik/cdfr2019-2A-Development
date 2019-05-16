@@ -1,6 +1,6 @@
 BOARD=f4
-PROJECT_DIR=testTIMencoder
-PROJECT_NAME=testTIMencoder
+PROJECT_DIR=base_odof4
+PROJECT_NAME=base_odof4
 DOC_DIR= /home/$(USER)/STM32Cube/
 
 rouge = \033[0;31m
