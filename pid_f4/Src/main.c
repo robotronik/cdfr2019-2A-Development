@@ -135,6 +135,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   init_odometry(&odometry,&htim2,&htim5, &htim10);
   HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
+  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_3);
+  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_4);
 
   PID_VALUE pid_sum;
   PID_VALUE pid_diff;
@@ -149,7 +153,9 @@ int main(void)
     FinalValueCalculation(pid_sum,D_TIME,sum)
     FinalValueCalculation(pid_diff,D_TIME,diff)
 
-    setPWM(&htim3,TIM_CHANNEL_ALL,254,100);
+    //setPWM(&htim3,TIM_CHANNEL_ALL,254,100);
+	motorControl(&htim3,(int)((pid_sum.current-pid_diff.current)/2),0);	
+	motorControl(&htim3,(int)((pid_sum.current+pid_diff.current)/2),1);	
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
