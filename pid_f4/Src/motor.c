@@ -37,7 +37,7 @@ void motorSetValue(TIM_HandleTypeDef * timer, uint32_t channel, uint16_t pulse){
 
 //see for macro in .h for simpler motor control ,
 // you have to modify some of the #define in order to adapt the code to your needs
-void motorControl(TIM_HandleType * timer,int value,uint8_t ismLeft){
+void motorControl(TIM_HandleTypeDef * timer,int value,uint8_t ismLeft){
     // a verifier
     if (ismLeft==1){
         if(value > 0){

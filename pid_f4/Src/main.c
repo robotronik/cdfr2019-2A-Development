@@ -142,8 +142,8 @@ int main(void)
 
   PID_VALUE pid_sum;
   PID_VALUE pid_diff;
-  InitializationPid(pid_sum,0,0.1,0.1,0.1)
-  InitializationPid(pid_diff,0,0.1,0.1,0.1)
+  InitializationPid(pid_sum,0,0.001,0,0)
+  InitializationPid(pid_diff,0,0.001,0,0)
   int sum =0 , diff =0;
   while (1)
   {
@@ -153,9 +153,13 @@ int main(void)
     FinalValueCalculation(pid_sum,D_TIME,sum)
     FinalValueCalculation(pid_diff,D_TIME,diff)
 
-    //setPWM(&htim3,TIM_CHANNEL_ALL,254,100);
-	motorControl(&htim3,(int)((pid_sum.current-pid_diff.current)/2),0);	
-	motorControl(&htim3,(int)((pid_sum.current+pid_diff.current)/2),1);	
+    //setPWM(&htim3,TIM_CHANNEL_ALL,254,100);e
+    //signs of the pi_diff have been swaped for electrical reasons , see commit no a2361dca81...
+	motorControl(&htim3,(int)(-(pid_sum.current+pid_diff.current)/2),0);	
+	motorControl(&htim3,(int)((pid_sum.current-pid_diff.current)/2),1);	
+  //for test purposes
+  // motorControl(&htim3,50,0);	//right
+	// motorControl(&htim3,-50,1);	//left
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
