@@ -6,9 +6,9 @@ volatile float ENCODER_STEP_DIST=/* 20.65 */6.24*2/6.0*2*M_PI/1440.0; //distance
 volatile float deltaL=(20.65*2*M_PI/1440.0)/199.66; //ENCODER_STEP_DIST/ENCODER_DIST
 int max;
 void update_odometry(Odometry *odometry){
-  int dl_l = -update_encoder(&odometry->encoder_l);
-  //TODO : modif retour
-  int dl_r = update_encoder(&odometry->encoder_r);
+  //this can look like an error but due to technical specification it is like that
+  int dl_l = update_encoder(&odometry->encoder_r);
+  int dl_r = -update_encoder(&odometry->encoder_l);
 
     /* char buffer[80];
     int n = sprintf(buffer, "\r%d\r",(int)(odometry->y*100));
