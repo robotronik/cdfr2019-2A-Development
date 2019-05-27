@@ -48,7 +48,7 @@
 /* USER CODE BEGIN Includes */
 #include "odometry.h"
 #include <stdio.h>
-#include "PID.h"
+#include "pid.h"
 #include "motor.h"
 
 #define D_TIME 1
@@ -140,32 +140,53 @@ int main(void)
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_3);
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_4);
 
-  PID_VALUE pid_sum;
-  PID_VALUE pid_diff;
-  InitializationPid(pid_sum,0,0,0,0)
-  InitializationPid(pid_diff,0,0,0,0)
-  int sum =0 , diff =0;
+  PID_Configuration pid_conf_sum = {.Kp = 10,
+  .Ki = 0,
+  .Kd = 0,
+  
+  .max_eps = 100000000,
+  .position_tolerance = 3,
+  .speed_tolerance =1
+  };
+  PID_Configuration pid_conf_diff = {.Kp = 500,
+  .Ki = .0,
+  .Kd = .0,
+  
+  .max_eps = 100000000,
+  .position_tolerance = 3,
+  .speed_tolerance =1
+  };
+  PID_Status pid_sum = {0};
+  PID_Status pid_diff = {0};
+
+  pid_init(&pid_sum,&pid_conf_sum);
+  pid_init(&pid_diff,&pid_conf_diff);
+
+  double voltage_l =0 , voltage_r =0;
+  double voltage_sum =0 ,voltage_diff =0;
+  double sum =0 , diff =0;
   while (1)
   {
-    sum = -odometry.encoder_l.steps + odometry.encoder_r.steps;
-    diff = odometry.encoder_l.steps +odometry.encoder_r.steps;
+    //sum = -odometry.encoder_l.steps + odometry.encoder_r.steps;
+    //diff = odometry.encoder_l.steps +odometry.encoder_r.steps;
     //debug
-    /* sum = 100*odometry.x;
-    diff = 100*odometry.theta; */
+    sum = odometry.x;
+    diff = odometry.theta;
 
-    FinalValueCalculation(pid_sum,D_TIME,sum)
-    FinalValueCalculation(pid_diff,D_TIME,diff)
 
-    // uart debug
+    voltage_sum = pid(&pid_sum,0-sum);
+    voltage_diff = pid(&pid_diff,0-diff);
+
+    voltage_l = voltage_sum - voltage_diff;
+    voltage_r = voltage_sum + voltage_diff;
+
      int n;char buffer[80];
     HAL_UART_Transmit(&huart2,"                         ",25,10);
-    n = sprintf(buffer, "%d : %d\n\r",(int)(pid_sum.current),(int)(sum));
+    n = sprintf(buffer, "%d\r\n",(int)((diff)*1000));
     HAL_UART_Transmit(&huart2,buffer,n,10);
-
-    //setPWM(&htim3,TIM_CHANNEL_ALL,254,100);e
     //signs of the pi_diff have been swaped for electrical reasons , see commit no a2361dca81...
-	motorControl(&htim3,(int)(-(pid_sum.current-pid_diff.current)/2),1);	
-	motorControl(&htim3,(int)(-(pid_sum.current+pid_diff.current)/2),0);	
+	motorControl(&htim3,(int)(voltage_l),1);	
+	motorControl(&htim3,(int)(voltage_r),0);	
   //for test purposes
   //motorControl(&htim3,50,0);	//right
 	//motorControl(&htim3,50,1);	//left

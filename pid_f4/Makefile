@@ -60,7 +60,8 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 Src/system_stm32f4xx.c  \
 Src/odometry.c \
 Src/encoder.c \
-Src/motor.c
+Src/motor.c \
+Src/pid.c
 
 # ASM sources
 ASM_SOURCES =  \
