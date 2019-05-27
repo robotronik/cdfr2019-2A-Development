@@ -10,18 +10,13 @@ void update_odometry(Odometry *odometry){
     int dl_l = update_encoder(&odometry->encoder_r);
     int dl_r = -update_encoder(&odometry->encoder_l);
 
-    /* char buffer[80];
-    int n = sprintf(buffer, "\r%d\r",(int)(odometry->y*100));
-    HAL_UART_Transmit(&huart2,"          ",10,10);
-    HAL_UART_Transmit(&huart2,buffer,n,10);
-     */
-     int n;char buffer[80];
+/*      int n;char buffer[80];
     HAL_UART_Transmit(&huart2,"                         ",25,10);
     n = sprintf(buffer, "\r%d : ",(int)(odometry->y*100));
     HAL_UART_Transmit(&huart2,buffer,n,10);
      
     n = sprintf(buffer, "%d\r",(int)(odometry->x*100));
-    HAL_UART_Transmit(&huart2,buffer,n,10);
+    HAL_UART_Transmit(&huart2,buffer,n,10); */
 
 #if TEST_ENCODER==1
   led_level = (int) (((float) odometry->encoder_l.htim->Instance->CNT / ENCODER_MAX)*255);

@@ -39,6 +39,9 @@ void motorSetValue(TIM_HandleTypeDef * timer, uint32_t channel, uint16_t pulse){
 // you have to modify some of the #define in order to adapt the code to your needs
 void motorControl(TIM_HandleTypeDef * timer,int value,uint8_t ismLeft){
     // a verifier
+    if(value > 254) value =254;
+    else if(value <-254) value= -254;
+    
     if (ismLeft==1){
         if(value > 0){
             motorSetValue(timer, 1,value);

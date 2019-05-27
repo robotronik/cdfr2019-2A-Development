@@ -56,10 +56,22 @@ typedef struct
     Swap(pid.errorGap[1],pid.errorGap[0])\
     Swap(pid.current, pid.goal)\
     pid.current = currentValue;\
-    pid.errorGap[0] = pid.goal - pid.current;\
+    pid.errorGap[0] = pid.goal - currentValue;\
     PCalculation(pid)\
     ICalculation(pid, T)\
     DCalculation(pid, T)\
 }\
 
+/* #define FinalValueCalculation(pid, T, currentValue)\
+{\
+    pid.errorGap[2] = 0;\
+    Swap(pid.errorGap[2],pid.errorGap[1])\
+    Swap(pid.errorGap[1],pid.errorGap[0])\
+    Swap(pid.current, pid.goal)\
+    pid.current = currentValue;\
+    pid.errorGap[0] = pid.goal - pid.current;\
+    PCalculation(pid)\
+    ICalculation(pid, T)\
+    DCalculation(pid, T)\
+}\ */
 #endif

@@ -142,21 +142,30 @@ int main(void)
 
   PID_VALUE pid_sum;
   PID_VALUE pid_diff;
-  InitializationPid(pid_sum,0,0.000001,0,0)
+  InitializationPid(pid_sum,0,0,0,0)
   InitializationPid(pid_diff,0,0,0,0)
   int sum =0 , diff =0;
   while (1)
   {
-    sum = odometry.encoder_l.steps + odometry.encoder_r.steps;
-    diff = odometry.encoder_l.steps - odometry.encoder_r.steps;
+    sum = -odometry.encoder_l.steps + odometry.encoder_r.steps;
+    diff = odometry.encoder_l.steps +odometry.encoder_r.steps;
+    //debug
+    /* sum = 100*odometry.x;
+    diff = 100*odometry.theta; */
 
     FinalValueCalculation(pid_sum,D_TIME,sum)
     FinalValueCalculation(pid_diff,D_TIME,diff)
 
+    // uart debug
+     int n;char buffer[80];
+    HAL_UART_Transmit(&huart2,"                         ",25,10);
+    n = sprintf(buffer, "%d : %d\n\r",(int)(pid_sum.current),(int)(sum));
+    HAL_UART_Transmit(&huart2,buffer,n,10);
+
     //setPWM(&htim3,TIM_CHANNEL_ALL,254,100);e
     //signs of the pi_diff have been swaped for electrical reasons , see commit no a2361dca81...
-	motorControl(&htim3,(int)((-pid_sum.current+pid_diff.current)/2),0);	
-	motorControl(&htim3,(int)(-(-pid_sum.current-pid_diff.current)/2),1);	
+	motorControl(&htim3,(int)(-(pid_sum.current-pid_diff.current)/2),1);	
+	motorControl(&htim3,(int)(-(pid_sum.current+pid_diff.current)/2),0);	
   //for test purposes
   //motorControl(&htim3,50,0);	//right
 	//motorControl(&htim3,50,1);	//left
