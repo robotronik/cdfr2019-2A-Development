@@ -107,7 +107,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM3_Init();
   MX_TIM15_Init();
-  MX_WWDG_Init();
+  // MX_WWDG_Init();
   /* USER CODE BEGIN 2 */
 
   /**************************************************/
@@ -116,39 +116,40 @@ int main(void)
   //Init odometry struct and start sampling
   init_odometry(&odometry, &htim2, &htim1, &htim15);
 
-  /**************************************************/
-  /*            Motors Init                         */
-  /**************************************************/
-  //Init variable used to reconfigure PWM
-  TIM_OC_InitTypeDef sConfigOC;
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  // /**************************************************/
+  // /*            Motors Init                         */
+  // /**************************************************/
+  // //Init variable used to reconfigure PWM
+  // TIM_OC_InitTypeDef sConfigOC;
+  // sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  // sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  // sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 
-  //PWM Start
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);//EN_2
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);//EN_1
+  // //PWM Start
+  // HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);//EN_2
+  // HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);//EN_1
 
-  //Direction init : forward
-  HAL_GPIO_WritePin(DIR_R_GPIO_Port, DIR_R_Pin, 1);
-  HAL_GPIO_WritePin(DIR_L_GPIO_Port, DIR_L_Pin, 0);
+  // //Direction init : forward
+  // HAL_GPIO_WritePin(DIR_R_GPIO_Port, DIR_R_Pin, 1);
+  // HAL_GPIO_WritePin(DIR_L_GPIO_Port, DIR_L_Pin, 0);
 
-  //Enable : stop
-  DRIVE_MOTOR_R(0);//encoder2 forward positive positive voltage
-  DRIVE_MOTOR_L(0);//encoder1 forward positive positive voltage
+  // //Enable : stop
+  // DRIVE_MOTOR_R(0);//encoder2 forward positive positive voltage
+  // DRIVE_MOTOR_L(0);//encoder1 forward positive positive voltage
 
-  //Release the brakes
-  HAL_GPIO_WritePin (NBRAKE_R_GPIO_Port, NBRAKE_R_Pin, GPIO_PIN_SET);
-  HAL_GPIO_WritePin (NBRAKE_L_GPIO_Port, NBRAKE_L_Pin, GPIO_PIN_SET);
+  // //Release the brakes
+  // HAL_GPIO_WritePin (NBRAKE_R_GPIO_Port, NBRAKE_R_Pin, GPIO_PIN_SET);
+  // HAL_GPIO_WritePin (NBRAKE_L_GPIO_Port, NBRAKE_L_Pin, GPIO_PIN_SET);
 
   /* USER CODE END 2 */
+    // HAL_Delay(10);
+    // HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,1);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
