@@ -1,13 +1,33 @@
 #include "Deplacement.h"
 
-int Avancer(float distance)
+static void TofDetection();
+
+static void TofDetection()
 {
-    float gap = distance;
-    uint8_t  = 0
-    while gap > EPSILON && HAL_UART_Receive(huart1, &)
+    uint8_t tofDetection = 0;
+    while(HAL_UART_Receive(&huart1, &tofDetection, 1, 200) && tofDetection)
+    {
+        asm("NOP");
+    }
+    return 1;
 }
 
-int Tourner(float angle)
+int Avancer(float distance, Odometry odometry)
 {
+    float gap = distance;
+    while (gap > EPSILON)
+    {
+        TofDetection();
+    }
+    return 1;
+}
 
+int Tourner(float angle, Odometry odometry)
+{
+    float gap = angle;
+    while (gap > EPSILON)
+    {
+        
+    }
+    return 1;
 }

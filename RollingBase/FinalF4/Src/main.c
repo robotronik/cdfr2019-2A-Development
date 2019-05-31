@@ -28,6 +28,7 @@
 /* USER CODE BEGIN Includes */
 #include "motor.h"
 #include "odometry.h"
+#include "Utils.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -127,7 +128,7 @@ int main(void)
 
   //Direction init : forward
   HAL_GPIO_WritePin(DIR_R_GPIO_Port, DIR_R_Pin, 0);
-  HAL_GPIO_WritePin(DIR_L_GPIO_Port, DIR_L_Pin, 1);
+  HAL_GPIO_WritePin(DIR_L_GPIO_Port, DIR_L_Pin, 0);
 
   //Enable : stop
   DRIVE_MOTOR_R(0);//encoder2 forward positive positive voltage
@@ -136,10 +137,12 @@ int main(void)
   //Release the brakes
   HAL_GPIO_WritePin (NBRAKE_R_GPIO_Port, NBRAKE_R_Pin, 1);
   HAL_GPIO_WritePin (NBRAKE_L_GPIO_Port, NBRAKE_L_Pin, GPIO_PIN_SET);
-
+  
   // CheckField(CAMP_GPIO_Port, CAMP_Pin);
-  // WaitCordPull(TIRETTE_GPIO_Port, TIRETTE_Pin);
+  WaitCordPull(TIRETTE_GPIO_Port, TIRETTE_Pin);
 
+  DRIVE_MOTOR_L(12);//encoder2 forward positive positive voltage
+  DRIVE_MOTOR_R(12);
 
   /* USER CODE END 2 */
 
@@ -150,8 +153,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  DRIVE_MOTOR_L(1.5);//encoder2 forward positive positive voltage
-  DRIVE_MOTOR_R(1.5);
+
   }
   /* USER CODE END 3 */
 }

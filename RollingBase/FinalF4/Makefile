@@ -36,7 +36,8 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
-Src/tim.c \
+Src/Deplacement.c \
+ Src/tim.c \
  Src/encoder.c \
  Src/stm32f4xx_hal_msp.c \
  Src/Utils.c \
@@ -47,7 +48,7 @@ Src/tim.c \
  Src/system_stm32f4xx.c \
  Src/usart.c \
  Src/odometry.c \
-\ \
+\
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
@@ -64,12 +65,6 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \
-Src/main.c \
-Src/gpio.c \
-Src/usart.c \
-Src/stm32f4xx_it.c \
-Src/stm32f4xx_hal_msp.c \
-Src/system_stm32f4xx.c
 
 # ASM sources
 ASM_SOURCES =  \
