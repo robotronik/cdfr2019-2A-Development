@@ -217,7 +217,7 @@ int main(void)
     diff = odometry.theta;
 
     voltage_sum = pid(&pid_sum,0-sum);
-    voltage_diff = pid(&pid_diff,5-diff);
+    voltage_diff = pid(&pid_diff,0-diff);
 
     //caps dynamique avec priorité sur langle 
     if((int)(voltage_diff)>0){
