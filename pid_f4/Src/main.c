@@ -140,22 +140,63 @@ int main(void)
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_3);
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_4);
 
-  PID_Configuration pid_conf_sum = {.Kp = 10,
-  .Ki = 0,
-  .Kd = 0,
+  PID_Configuration pid_conf_sum = {
+  .Kp = 100,
+  .Ki = 0.0001,
+  .Kd = 200,
   
   .max_eps = 100000000,
-  .position_tolerance = 3,
-  .speed_tolerance =1
+  .position_tolerance = 10,
+  .speed_tolerance =1,
+  .Te =1
   };
-  PID_Configuration pid_conf_diff = {.Kp = 500,
-  .Ki = .0,
-  .Kd = .0,
-  
+
+
+ PID_Configuration pid_conf_diff = {
+  .Kp = 400 ,
+  .Ki = 0.1,
+  .Kd = 150,
+  // .Kp = 400 ,
+  // .Ki = 0.1,
+  // .Kd = 150,
   .max_eps = 100000000,
-  .position_tolerance = 3,
-  .speed_tolerance =1
+  .position_tolerance = 4,
+  .speed_tolerance =1,
+  .Te =1
   };
+
+  // double KuTranslation = 300; // K permettant oscillation entretenues
+  // double TuTranslation = 0.63;  //seconde en periode d'oscillations
+  // #define KUTRANSLATION 0.6*KuTranslation
+  // PID_Configuration pid_conf_diff = {
+  // .Kp = KUTRANSLATION,
+  // .Ki = KUTRANSLATION*2/TuTranslation,
+  // .Kd = KUTRANSLATION*TuTranslation/8,
+  
+  // .max_eps = 100000000,
+  // .position_tolerance = .1,
+  // .speed_tolerance =1,
+  // .Te =1
+  // }
+
+  // double KuRotation = 5000; // K permettant oscillation entretenues
+  // double TuRotation = 0.63;  //seconde en periode d'oscillations
+  // #define KPROTATION 0.6*KuRotation
+  // PID_Configuration pid_conf_diff = {
+  // .Kp = KPROTATION,
+  // .Ki = KPROTATION*2/TuRotation,
+  // .Kd = KPROTATION*TuRotation/8,
+  
+  // .max_eps = 100000000,
+  // .position_tolerance = .1,
+  // .speed_tolerance =1,
+  // .Te =1
+  // }
+
+
+
+
+
   PID_Status pid_sum = {0};
   PID_Status pid_diff = {0};
 
@@ -165,7 +206,9 @@ int main(void)
   double voltage_l =0 , voltage_r =0;
   double voltage_sum =0 ,voltage_diff =0;
   double sum =0 , diff =0;
-  while (1)
+  double i =0;
+  double maxisum=0;
+  while (reached(pid_diff))
   {
     //sum = -odometry.encoder_l.steps + odometry.encoder_r.steps;
     //diff = odometry.encoder_l.steps +odometry.encoder_r.steps;
@@ -173,16 +216,28 @@ int main(void)
     sum = odometry.x;
     diff = odometry.theta;
 
-
     voltage_sum = pid(&pid_sum,0-sum);
-    voltage_diff = pid(&pid_diff,0-diff);
+    voltage_diff = pid(&pid_diff,5-diff);
 
+    //caps dynamique avec priorité sur langle 
+    if((int)(voltage_diff)>0){
+      maxisum = 254.0 - voltage_diff;
+    }
+    else{
+      maxisum = 254 + voltage_diff;
+    }
+    if((int)(maxisum)<(int)voltage_sum){
+      voltage_sum = maxisum;
+    }
+    else if((int)(-maxisum)>(int)voltage_sum){
+      voltage_sum =-maxisum;
+    }
     voltage_l = voltage_sum - voltage_diff;
     voltage_r = voltage_sum + voltage_diff;
 
      int n;char buffer[80];
     HAL_UART_Transmit(&huart2,"                         ",25,10);
-    n = sprintf(buffer, "%d\r\n",(int)((diff)*1000));
+    n = sprintf(buffer,  "le pid est %d \r\n ",reached(&pid_sum));
     HAL_UART_Transmit(&huart2,buffer,n,10);
     //signs of the pi_diff have been swaped for electrical reasons , see commit no a2361dca81...
 	motorControl(&htim3,(int)(voltage_l),1);	

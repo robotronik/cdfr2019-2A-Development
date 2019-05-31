@@ -35,14 +35,14 @@ void update_odometry(Odometry *odometry){
 
   odometry->theta = odometry->theta+deltaL*(dl_l - dl_r);
 
-  if(odometry->theta>PI)//angle limitation to -PI +PI
+  /* if(odometry->theta>PI)//angle limitation to -PI +PI
   {
     odometry->theta=odometry->theta-2*PI;
   }
   else if(odometry->theta<=-PI)
   {
     odometry->theta=odometry->theta+2*PI;
-  }
+  } */
 }
 
 void init_odometry(Odometry *odometry, TIM_HandleTypeDef *htim_l, TIM_HandleTypeDef *htim_r, TIM_HandleTypeDef *htim_poll){

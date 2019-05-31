@@ -27,8 +27,8 @@ double pid(PID_Status *pid, double eps)
   pid->integral += pid->conf->Te * eps;
   double output =
       pid->conf->Kp * eps
-/*     + pid->conf->Ki * pid->integral
-    + pid->conf->Kd * pid->derivate */;
+    + pid->conf->Ki * pid->integral
+    + pid->conf->Kd * pid->derivate;
 
   pid->prev_eps = eps;
   return output;
