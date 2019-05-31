@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "gpio.h": "c",
+        "tim.h": "c",
+        "motor.h": "c",
+        "main.h": "c",
+        "stdio.h": "c",
+        "stm32f4xx_hal.h": "c",
+        "usart.h": "c",
+        "stm32f4xx_hal_conf.h": "c",
+        "utils.h": "c"
+    }
+}
